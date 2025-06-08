@@ -28,6 +28,16 @@ Matrix::Matrix(size_t rows, size_t cols) : _rows(rows), _cols(cols) {
     }
 }
 
+Matrix::Matrix(Matrix& other) : _rows{other._rows}, _cols{other._rows}{
+    std::cout << "cp ctor" << std::endl;
+    _data = new double*[_rows];
+    for (size_t i = 0; i < _rows; ++i) {
+        _data[i] = new double[_cols];
+    }
+}
+
+
+
 Matrix::~Matrix() {
     for (size_t i = 0; i < _rows; ++i) {
         delete[] _data[i];
