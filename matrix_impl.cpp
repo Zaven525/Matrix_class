@@ -28,20 +28,65 @@ Matrix::Matrix(size_t rows, size_t cols) : _rows(rows), _cols(cols) {
     }
 }
 
-Matrix::Matrix(Matrix& other) : _rows{other._rows}, _cols{other._rows}{
-    std::cout << "cp ctor" << std::endl;
+Matrix::Matrix(const Matrix& other) : _rows(other._rows), _cols(other._cols) {
+    std::cout << "copy ctor" << std::endl;
     _data = new double*[_rows];
     for (size_t i = 0; i < _rows; ++i) {
         _data[i] = new double[_cols];
+        for (size_t j = 0; j < _cols; ++j) {
+            _data[i][j] = other._data[i][j];
+        }
     }
 }
 
+Matrix::Matrix(Matrix&& other) : _rows(other._rows), _cols(other._cols), _data(other._data) {
+    std::cout << "move ctor" << std::endl;
+    other._rows = 0;
+    other._cols = 0;
+    other._data = nullptr;
+}
 
+Matrix& Matrix::operator=(const Matrix& other) {
+    std::cout << "copy assignment" << std::endl;
+    if (this != &other) {
+        for (size_t i = 0; i < _rows; ++i)
+            delete[] _data[i];
+        delete[] _data;
+
+        _rows = other._rows;
+        _cols = other._cols;
+        _data = new double*[_rows];
+        for (size_t i = 0; i < _rows; ++i) {
+            _data[i] = new double[_cols];
+            for (size_t j = 0; j < _cols; ++j)
+                _data[i][j] = other._data[i][j];
+        }
+    }
+    return *this;
+}
+
+Matrix& Matrix::operator=(Matrix&& other) noexcept {
+    std::cout << "move assignment" << std::endl;
+    if (this != &other) {
+
+        for (size_t i = 0; i < _rows; ++i)
+            delete[] _data[i];
+        delete[] _data;
+
+        _rows = other._rows;
+        _cols = other._cols;
+        _data = other._data;
+
+        other._rows = 0;
+        other._cols = 0;
+        other._data = nullptr;
+    }
+    return *this;
+}
 
 Matrix::~Matrix() {
-    for (size_t i = 0; i < _rows; ++i) {
+    for (size_t i = 0; i < _rows; ++i)
         delete[] _data[i];
-    }
     delete[] _data;
 }
 

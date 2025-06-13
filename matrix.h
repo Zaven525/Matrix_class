@@ -5,10 +5,10 @@ class Matrix{
 public:
     Matrix();
     Matrix(size_t, size_t);
-    Matrix(Matrix& other);
+    Matrix(const Matrix& other);
     Matrix& operator=(const Matrix& other);
     Matrix(Matrix&& other);
-    Matrix& operator=(const Matrix&& other);
+    Matrix& operator=(Matrix&& other);
     ~Matrix();
     size_t getRows() const; //Returns the number of rows.
     size_t getCols() const; //Returns the number of columns.
