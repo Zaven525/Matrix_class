@@ -8,7 +8,20 @@ public:
     Matrix(const Matrix& other);
     Matrix& operator=(const Matrix& other);
     Matrix(Matrix&& other);
-    Matrix& operator=(Matrix&& other);
+    Matrix& operator=(Matrix&& other) noexcept;
+    friend Matrix operator+(const Matrix&, const Matrix&);
+    friend Matrix operator-(const Matrix&, const Matrix&);
+    friend Matrix operator*(const Matrix&, const Matrix&);
+    friend Matrix operator*(const Matrix&, double);
+    friend Matrix operator*(double, const Matrix&);
+
+    Matrix& operator+=(const Matrix&);
+    Matrix& operator-=(const Matrix&);
+    Matrix& operator*=(const Matrix&);
+    Matrix& operator*=(double);
+
+    
+    
     ~Matrix();
     size_t getRows() const; //Returns the number of rows.
     size_t getCols() const; //Returns the number of columns.

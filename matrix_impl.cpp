@@ -84,6 +84,109 @@ Matrix& Matrix::operator=(Matrix&& other) noexcept {
     return *this;
 }
 
+Matrix operator+(const Matrix& lhs, const Matrix& rhs) {
+    if (lhs._rows != rhs._rows || lhs._cols != rhs._cols) {
+        return lhs;
+    }
+
+    Matrix result(lhs._rows, lhs._cols);
+    for (size_t i = 0; i < lhs._rows; ++i) {
+        for (size_t j = 0; j < lhs._cols; ++j) {
+            result._data[i][j] = lhs._data[i][j] + rhs._data[i][j];
+        }
+    }
+    return result;
+}
+
+Matrix operator-(const Matrix& lhs, const Matrix& rhs) {
+    if (lhs._rows != rhs._rows || lhs._cols != rhs._cols) {
+        return lhs;
+    }
+
+    Matrix result(lhs._rows, lhs._cols);
+    for (size_t i = 0; i < lhs._rows; ++i) {
+        for (size_t j = 0; j < lhs._cols; ++j) {
+            result._data[i][j] = lhs._data[i][j] - rhs._data[i][j];
+        }
+    }
+    return result;
+}
+
+Matrix operator*(const Matrix& lhs, const Matrix& rhs) {
+    if (lhs._rows != rhs._cols) {
+        return lhs;
+    }
+
+    Matrix result(lhs._rows, rhs._cols);
+    for (size_t i = 0; i < lhs._rows; ++i) {
+        for (size_t j = 0; j < lhs._cols; ++j) {
+            result._data[i][j] = 0;
+            for (size_t h = 0; h < result._rows; h++) {
+                result._data[i][j] += lhs._data[i][h] * rhs._data[h][j];
+            }
+        }
+    }
+    return result;
+}
+
+Matrix operator*(const Matrix& lhs, double num) {
+    Matrix result = lhs;
+    for (size_t i = 0; i < lhs._rows; i++) {
+        for (size_t j = 0; j < lhs._cols; j++) {
+            result._data[i][j] = lhs._data[i][j] * num;
+        }
+    }
+    return result;
+}
+
+Matrix operator*(double num, const Matrix& rhs) {
+    return rhs * num;
+}
+
+Matrix& Matrix::operator+=(const Matrix& other) {
+    if (_rows != other._rows || _cols != other._cols) {
+        return *this;
+    }
+
+    for (size_t i = 0; i < _rows; i++) {
+        for (size_t j = 0; j < _cols; j++) {
+            _data[i][j] += other._data[i][j];
+        }
+    }
+    return *this;
+}
+
+Matrix& Matrix::operator-=(const Matrix& other) {
+    if (_rows != other._rows || _cols != other._cols) {
+        return *this;
+    }
+
+    for (size_t i = 0; i < _rows; i++) {
+        for (size_t j = 0; j < _cols; j++) {
+            _data[i][j] -= other._data[i][j];
+        }
+    }
+    return *this;
+}
+
+Matrix& Matrix::operator*=(const Matrix& other) {
+    for (size_t i = 0; i < _rows; i++) {
+        for (size_t j = 0; j < _cols; j++) {
+            _data[i][j] *= other._data[i][j];
+        }
+    }
+    return *this;
+}
+
+Matrix& Matrix::operator*=(double num) {
+    for (size_t i = 0; i < _rows; i++) {
+        for (size_t j = 0; j < _cols; j++) {
+            _data[i][j] *= num;
+        }
+    }
+    return *this;
+}
+
 Matrix::~Matrix() {
     for (size_t i = 0; i < _rows; ++i)
         delete[] _data[i];
